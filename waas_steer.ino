@@ -164,13 +164,15 @@ void got_frame(uint32_t id, uint8_t extended, uint8_t length, BytesUnion *data) 
 		if (signal_type < 4) { //if we don't have SF1, pretend we do
 			data->bytes[4] = 0x40; //indicate that the receiver is set to SF1
 
-			//Serial.println("DEBUG: Steer with low-quality signal.");
-
 			//the second byte is the signal strength bar graph indicator
-			if (signal_type > 1)
+			if (signal_type > 1) {
+				//Serial.println("DEBUG: Steer with medium-quality signal.");
 				data->bytes[3] = 0x46; //WAAS, so pretend SF1, medium accuracy
-			else
+			}
+			else {
+				//Serial.println("DEBUG: Steer with low-quality signal.");
 				data->bytes[3] = 0x43; //3D+ so pretend SF1, low accuracy
+			}
 		}
 		//otherwise we'll let it through as is
 	}
